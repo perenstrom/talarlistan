@@ -7,6 +7,7 @@ import { SPEAKER_STATUS } from "../consts/speakerStatus";
 
 import { SpeakerCard } from "../components/SpeakerCard";
 import { AddSpeakerForm } from "../components/AddSpeakerForm";
+import { CancelButton } from "../components/CancelButton";
 
 export default function List(props) {
   const { list } = props;
@@ -114,7 +115,7 @@ export default function List(props) {
           {!activeSpeaker ? (
             <AddSpeakerForm onSubmit={onSubmit} name={name} setName={setName} />
           ) : (
-            <button onClick={handleCancel}>Jag vill inte prata längre</button>
+            <CancelButton handleCancel={handleCancel} />
           )}
         </>
       )}
