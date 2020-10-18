@@ -6,7 +6,7 @@ export const AddSpeakerForm = React.memo(function AddSpeakerForm(props) {
 
   return (
     <form onSubmit={onSubmit} className={styles.submitForm}>
-      <label for="name" className={styles.label}>
+      <label htmlFor="name" className={styles.label}>
         Ditt namn:
       </label>
       <input

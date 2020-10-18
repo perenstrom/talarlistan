@@ -11,18 +11,33 @@ import { CancelButton } from "../components/CancelButton";
 export default function List(props) {
   const { list } = props;
 
-  const apiUrl = `/api/lists/${list.slug}/speakers`;
-  const { data = {}, error } = useSWR(apiUrl, undefined, {
-    refreshInterval: 5000,
-    initialData: list.speakers,
-  });
-
-  const speakers = data;
-
   const [name, setName] = useState("");
   const [activeSpeaker, setActiveSpeaker] = useState(false);
   const [activeSpeakerId, setActiveSpeakerId] = useState(null);
   const [activeSpeakerName, setActiveSpeakerName] = useState("");
+
+  const checkSpeakerRemoved = (speakers) => {
+    const speakerExists = speakers.find(
+      (speaker) => speaker.id === activeSpeakerId
+    );
+    if (!speakerExists) {
+      resetState();
+    }
+  };
+
+  const apiUrl = `/api/lists/${list.slug}/speakers`;
+  const { data = {}, error } = useSWR(apiUrl, undefined, {
+    refreshInterval: 5000,
+    initialData: list.speakers,
+    onSuccess: checkSpeakerRemoved,
+  });
+  const speakers = data;
+
+  const resetState = () => {
+    setActiveSpeakerName("");
+    setActiveSpeakerId(null);
+    setActiveSpeaker(false);
+  };
 
   const onSubmit = (event) => {
     event.preventDefault();
@@ -81,9 +96,7 @@ export default function List(props) {
         }
       })
       .then(() => {
-        setActiveSpeakerName("");
-        setActiveSpeakerId(null);
-        setActiveSpeaker(false);
+        resetState();
         mutate(apiUrl);
       });
   };
