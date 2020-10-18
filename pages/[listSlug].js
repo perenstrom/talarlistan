@@ -3,6 +3,7 @@ import Head from "next/head";
 import useSWR, { mutate } from "swr";
 
 import styles from "../styles/Home.module.css";
+import { SPEAKER_STATUS } from "../consts/speakerStatus";
 
 export default function List(props) {
   const { list } = props;
@@ -20,6 +21,7 @@ export default function List(props) {
   const [name, setName] = useState("");
   const [activeSpeaker, setActiveSpeaker] = useState(false);
   const [activeSpeakerId, setActiveSpeakerId] = useState(null);
+  const [activeSpeakerName, setActiveSpeakerName] = useState("");
 
   const onSubmit = (event) => {
     event.preventDefault();
@@ -46,9 +48,41 @@ export default function List(props) {
         }
       })
       .then((data) => {
-        setName("");
+        setActiveSpeakerName(name);
         setActiveSpeakerId(data.id);
         setActiveSpeaker(true);
+        mutate(apiUrl);
+      });
+  };
+
+  const handleCancel = (event) => {
+    event.preventDefault();
+
+    const url = `/api/speakers/${activeSpeakerId}`;
+    const options = {
+      method: "PUT",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json;charset=UTF-8",
+      },
+      body: JSON.stringify({
+        name: activeSpeakerName,
+        status: SPEAKER_STATUS.removedBySpeaker,
+      }),
+    };
+
+    fetch(url, options)
+      .then((response) => {
+        if (response.status === 200) {
+          return response.json();
+        } else {
+          console.error(response.status);
+        }
+      })
+      .then((data) => {
+        setActiveSpeakerName("");
+        setActiveSpeakerId(null);
+        setActiveSpeaker(false);
         mutate(apiUrl);
       });
   };
@@ -64,6 +98,7 @@ export default function List(props) {
         <div>Något gick fel, uppdatera sidan!</div>
       ) : (
         <>
+          {speakers.length === 0 && <div>Talarlistan är tom</div>}
           {speakers.length > 0 && (
             <ul>
               {speakers.map((speaker) => (
@@ -87,7 +122,7 @@ export default function List(props) {
               <button type="submit">Jag vill prata</button>
             </form>
           ) : (
-            <button>Jag vill inte prata längre</button>
+            <button onClick={handleCancel}>Jag vill inte prata längre</button>
           )}
         </>
       )}

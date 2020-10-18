@@ -2,12 +2,21 @@ import db from "../../../lib/db";
 import { SPEAKER_STATUS } from "../../../consts/speakerStatus";
 
 export default async (req, res) => {
-  if (req.method === "POST") {
-    const { name, listId } = req.body;
-    if (name) {
+  if (req.method === "PUT") {
+    const {
+      query: { id },
+      body: speaker,
+    } = req;
+
+    if (id) {
       db.one(
-        "INSERT INTO speakers(list, name, created_at, status) VALUES($1, $2, current_timestamp, $3) RETURNING *",
-        [listId, name, SPEAKER_STATUS.wantsToSpeak]
+        `
+        UPDATE speakers 
+        SET (name, status) = ($1, $2)
+        WHERE id = $3
+        RETURNING *
+        `,
+        [speaker.name, speaker.status, id]
       )
         .then((data) => {
           res.statusCode = 200;
@@ -18,7 +27,7 @@ export default async (req, res) => {
           res.status(500).end();
         });
     } else {
-      res.status(400).end("Name cannot be blank");
+      res.status(404).end("Speaker not found");
     }
   } else {
     res.status(404).end();

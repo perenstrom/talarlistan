@@ -11,7 +11,7 @@ export default async (req, res) => {
       FROM speakers 
       LEFT JOIN lists 
       ON speakers.list = lists.id 
-      WHERE lists.slug = $1 
+      WHERE lists.slug = $1 AND speakers.status = 'WANTS_TO_SPEAK'
       ORDER BY speakers.created_at ASC`,
       [slug]
     );

@@ -11,7 +11,7 @@ export default async (req, res) => {
       `
       SELECT speakers.id, speakers.created_at, speakers.name, speakers.status 
       FROM speakers 
-      WHERE list = $1
+      WHERE list = $1 AND speakers.status = 'WANTS_TO_SPEAK'
       ORDER BY speakers.created_at ASC
       `,
       [list.id]
