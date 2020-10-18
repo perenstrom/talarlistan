@@ -9,7 +9,12 @@
   },
   "dependencies": {
     "next": "9.5.5",
+    "pg-promise": "^10.7.0",
     "react": "16.14.0",
     "react-dom": "16.14.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.11.0",
+    "eslint-plugin-react": "^7.21.4"
   }
 }
