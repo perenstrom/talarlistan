@@ -1,5 +1,4 @@
 import db from "../../../lib/db";
-import { SPEAKER_STATUS } from "../../../consts/speakerStatus";
 
 export default async (req, res) => {
   if (req.method === "PUT") {

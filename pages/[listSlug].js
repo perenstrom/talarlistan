@@ -2,10 +2,9 @@ import React, { useState } from "react";
 import Head from "next/head";
 import useSWR, { mutate } from "swr";
 
-import styles from "./List.module.css";
 import { SPEAKER_STATUS } from "../consts/speakerStatus";
 
-import { SpeakerCard } from "../components/SpeakerCard";
+import { SpeakerList } from "../components/SpeakerList";
 import { AddSpeakerForm } from "../components/AddSpeakerForm";
 import { CancelButton } from "../components/CancelButton";
 
@@ -81,7 +80,7 @@ export default function List(props) {
           console.error(response.status);
         }
       })
-      .then((data) => {
+      .then(() => {
         setActiveSpeakerName("");
         setActiveSpeakerId(null);
         setActiveSpeaker(false);
@@ -90,28 +89,17 @@ export default function List(props) {
   };
 
   return (
-    <div className={styles.container}>
+    <div>
       <Head>
         <title>Talarlistan | {list.name}</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <h1 className={styles.listHeading}>{list.name}</h1>
+      <h1 className="listHeading">{list.name}</h1>
       {error ? (
         <div>Något gick fel, uppdatera sidan!</div>
       ) : (
         <>
-          {speakers.length === 0 && <div>Talarlistan är tom</div>}
-          {speakers.length > 0 && (
-            <ul className={styles.reset}>
-              {speakers.map((speaker, index) => (
-                <SpeakerCard
-                  speaker={speaker}
-                  index={index + 1}
-                  you={speaker.id === activeSpeakerId}
-                />
-              ))}
-            </ul>
-          )}
+          <SpeakerList speakers={speakers} activeSpeakerId={activeSpeakerId} />
           {!activeSpeaker ? (
             <AddSpeakerForm onSubmit={onSubmit} name={name} setName={setName} />
           ) : (

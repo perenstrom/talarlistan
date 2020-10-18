@@ -14,6 +14,30 @@
 }
 
 .timeStamp {
+  display: block;
   color: #666;
   font-size: 0.8rem;
+  width: 100%;
+}
+
+.markCompleteButton {
+  width: 50%;
+  height: 2rem;
+  border-radius: 5px;
+  cursor: pointer;
+
+  border: 0 none;
+  font-size: 1rem;
+  background-color: #4287f5;
+}
+
+.removeButton {
+  width: 50%;
+  height: 2rem;
+  border-radius: 5px;
+  cursor: pointer;
+
+  border: 0 none;
+  font-size: 1rem;
+  background-color: #d63838;
 }
