@@ -2,20 +2,19 @@ import React, { useState } from "react";
 import Head from "next/head";
 import useSWR, { mutate } from "swr";
 
-import styles from "../styles/Home.module.css";
+import styles from "./List.module.css";
 import { SPEAKER_STATUS } from "../consts/speakerStatus";
 
+import { SpeakerCard } from "../components/SpeakerCard";
 export default function List(props) {
   const { list } = props;
 
   const apiUrl = `/api/lists/${list.slug}/speakers`;
-  console.log(apiUrl);
   const { data = {}, error } = useSWR(apiUrl, undefined, {
     refreshInterval: 5000,
     initialData: list.speakers,
   });
 
-  console.log(data);
   const speakers = data;
 
   const [name, setName] = useState("");
@@ -100,11 +99,13 @@ export default function List(props) {
         <>
           {speakers.length === 0 && <div>Talarlistan är tom</div>}
           {speakers.length > 0 && (
-            <ul>
-              {speakers.map((speaker) => (
-                <li key={speaker.id}>
-                  {speaker.name} ({speaker.created_at})
-                </li>
+            <ul className={styles.reset}>
+              {speakers.map((speaker, index) => (
+                <SpeakerCard
+                  speaker={speaker}
+                  index={index + 1}
+                  you={speaker.id === activeSpeakerId}
+                />
               ))}
             </ul>
           )}

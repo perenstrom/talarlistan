@@ -1,0 +1,19 @@
+.card {
+  margin: 0.5rem;
+  padding: 0.5rem;
+  border: 1px solid black;
+  border-radius: 5px;
+}
+
+.active {
+  background-color: #eefaeb;
+}
+
+.heading {
+  margin: 0;
+}
+
+.timeStamp {
+  color: #666;
+  font-size: 0.8rem;
+}
