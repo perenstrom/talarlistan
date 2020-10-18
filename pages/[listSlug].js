@@ -6,6 +6,8 @@ import styles from "./List.module.css";
 import { SPEAKER_STATUS } from "../consts/speakerStatus";
 
 import { SpeakerCard } from "../components/SpeakerCard";
+import { AddSpeakerForm } from "../components/AddSpeakerForm";
+
 export default function List(props) {
   const { list } = props;
 
@@ -110,18 +112,7 @@ export default function List(props) {
             </ul>
           )}
           {!activeSpeaker ? (
-            <form onSubmit={onSubmit}>
-              <label>
-                Ditt namn
-                <input
-                  type="text"
-                  name="name"
-                  value={name}
-                  onChange={(event) => setName(event.target.value)}
-                />
-              </label>
-              <button type="submit">Jag vill prata</button>
-            </form>
+            <AddSpeakerForm onSubmit={onSubmit} name={name} setName={setName} />
           ) : (
             <button onClick={handleCancel}>Jag vill inte prata längre</button>
           )}
