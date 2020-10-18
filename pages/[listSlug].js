@@ -6,11 +6,16 @@ import styles from "../styles/Home.module.css";
 
 export default function List(props) {
   const { list } = props;
-  const apiUrl = `/api/speakers/${list.id}`;
+
+  const apiUrl = `/api/lists/${list.slug}/speakers`;
+  console.log(apiUrl);
   const { data = {}, error } = useSWR(apiUrl, undefined, {
     refreshInterval: 5000,
+    initialData: list.speakers,
   });
-  const { speakers = [] } = data;
+
+  console.log(data);
+  const speakers = data;
 
   const [name, setName] = useState("");
   const [activeSpeaker, setActiveSpeaker] = useState(false);
@@ -59,11 +64,12 @@ export default function List(props) {
         <div>Något gick fel, uppdatera sidan!</div>
       ) : (
         <>
-          {!data && <div>Laddar...</div>}
-          {data && (
+          {speakers.length > 0 && (
             <ul>
               {speakers.map((speaker) => (
-                <li>{speaker.name}</li>
+                <li key={speaker.id}>
+                  {speaker.name} ({speaker.created_at})
+                </li>
               ))}
             </ul>
           )}
@@ -95,7 +101,7 @@ export async function getServerSideProps(context) {
   } = context;
 
   const res = await fetch(`${process.env.API_URL}/api/lists/${listSlug}`);
-  const data = await res.json();
+  const list = await res.json();
 
-  return { props: { list: data.list } };
+  return { props: { list } };
 }
