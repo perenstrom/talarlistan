@@ -95,7 +95,7 @@ export default function List(props) {
         <title>Talarlistan | {list.name}</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <h1>{list.name}</h1>
+      <h1 className={styles.listHeading}>{list.name}</h1>
       {error ? (
         <div>Något gick fel, uppdatera sidan!</div>
       ) : (
